@@ -31,5 +31,10 @@ test("Should load the main page", async () => {
 
 test("Should get the data object", async () => {
     let response = await request(app).get("/api");
+    expect(response.status).toBe(200);
+});
+
+test("Should get the data object", async () => {
+    let response = await request(app).get("/api");
     expect(response.body).toEqual({ _id: "123", name: "name" });
 });
