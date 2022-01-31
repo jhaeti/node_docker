@@ -32,12 +32,12 @@ jobs:
             - run: npm run test:staging
 
             - name: Build and push Docker images
-              uses: docker/build-push-action@v1
+              uses: mr-smithers-excellent/docker-build-push@v5
               with:
+                  image: docker-hub-repo/image-name
+                  registry: docker.io
                   username: ${{ secrets.DOCKER_USERNAME }}
                   password: ${{ secrets.DOCKER_PASSWORD }}
-                  path: api
-                  repository: jhae/ci-backend
             # - name: Checkout
             #   uses: actions/checkout@v2
             # - name: Set up QEMU
