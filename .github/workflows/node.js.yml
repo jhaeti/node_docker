@@ -55,4 +55,4 @@ jobs:
               with:
                   context: api
                   push: true
-                  tags: user/app:latest
+                  tags: jhae/ci-backend:latest
