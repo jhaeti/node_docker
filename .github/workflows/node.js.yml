@@ -34,7 +34,7 @@ jobs:
             - name: Build and push Docker images
               uses: mr-smithers-excellent/docker-build-push@v5
               with:
-                  directory: ./api
+                  dockerfile: api/Dockerfile
                   image: jhae/ci-backend
                   registry: docker.io
                   username: ${{ secrets.DOCKER_USERNAME }}
