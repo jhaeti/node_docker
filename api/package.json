@@ -10,7 +10,7 @@
         "test:staging": "jest"
     },
     "keywords": [],
-    "author": "",
+    "author": "Ti Jhae",
     "license": "ISC",
     "dependencies": {
         "express": "^4.17.1",
