@@ -52,6 +52,5 @@ jobs:
               uses: docker/build-push-action@v2
               with:
                   context: api
-                  platforms: linux/amd64,linux/arm64
                   push: true
-                  tags: jhae/ci-backend:latest
+                  tags: jhae/ci-backend:latest-v2
