@@ -12,13 +12,10 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: api
 
         strategy:
             matrix:
-                node-version: [16.x]
+                node-version: [14.x, 16.x]
                 # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
         steps:
@@ -32,9 +29,12 @@ jobs:
             - run: npm run test:staging
 
             - name: Build and push Docker images
+              defaults:
+                  run:
+                      working-directory: api
               uses: mr-smithers-excellent/docker-build-push@v5
               with:
-                  image: jhae/ci-backend
+                  image: jhae/ci-bakend
                   registry: docker.io
                   username: ${{ secrets.DOCKER_USERNAME }}
                   password: ${{ secrets.DOCKER_PASSWORD }}
