@@ -51,7 +51,7 @@ jobs:
               run: |
                 docker pull jhae/ci-backend:latest
                 docker tag jhae/ci-backend:latest jhae/ci-backend:old
-                docker push jhae/ci-backend:old
+                docker push jhae/ci-backend:${{github.sha}}
                 
             - name: Build and push
               uses: docker/build-push-action@v2
