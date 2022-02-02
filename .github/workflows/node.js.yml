@@ -62,9 +62,10 @@ jobs:
         
         steps:
             - name: Retag to latest
-              uses: Z-M-Huang/docker-retag-curl@0.1.0
+              uses: koraykoska/retag-docker-image@0.2.4
               with:
-                repo: jhae/ci-backend
+                registry: docker.io
+                name: docker.io/jhae/ci-backend
                 new_tag: ${{ github.sha }}
                 old_tag: latest
                 username: ${{ secrets.DOCKERHUB_USERNAME }}
