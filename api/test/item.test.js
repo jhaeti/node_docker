@@ -40,6 +40,16 @@ test("Should get the data object", async () => {
 });
 
 test("Should get the data object", async () => {
+    let response = await request(app).get("/api3");
+    expect(response.status).toBe(200);
+});
+
+test("Should get the data object", async () => {
     let response = await request(app).get("/api");
+    expect(response.body).toEqual({ _id: "123", name: "name" });
+});
+
+test("Should get the data object", async () => {
+    let response = await request(app).get("/api3");
     expect(response.body).toEqual({ _id: "123", name: "name" });
 });
