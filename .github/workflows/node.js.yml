@@ -63,12 +63,6 @@ jobs:
                 working-directory: api
         
         steps:
-            - name: Set outputs
-              id: vars
-              run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-            - name: Check outputs
-              run: echo ${{ steps.vars.outputs.sha_short }}
-              
             - name: Retag to latest
               uses: koraykoska/retag-docker-image@0.2.4
               with:
