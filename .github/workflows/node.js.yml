@@ -68,6 +68,6 @@ jobs:
                 name: docker.io/jhae/ci-backend
                 new_tag: ${{ github.sha }}
                 old_tag: latest
-                username: ${{ secrets.DOCKERHUB_USERNAME }}
+                username: jhae
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
         
