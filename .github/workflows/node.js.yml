@@ -6,8 +6,6 @@ name: Node.js CI
 on:
     push:
         branches: [master]
-    pull_request:
-        branches: [master]
     workflow_dispatch:
 
 jobs:
@@ -64,12 +62,11 @@ jobs:
         
         steps:
             - name: Retag to latest
-              uses: koraykoska/retag-docker-image@0.2.4
+              uses: Z-M-Huang/docker-retag-curl@0.1.0
               with:
-                registry: docker.io
-                name: jhae/ci-backend
-                old_tag: latest
+                repo: jhae/ci-backend
                 new_tag: ${{ github.sha }}
-                username: ${{ secrets.DOCKER_USERNAME }}
-                password: ${{ secrets.DOCKER_PASSWORD }}
+                old_tag: latest
+                username: ${{ secrets.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_TOKEN }}
         
