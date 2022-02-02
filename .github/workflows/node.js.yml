@@ -50,8 +50,8 @@ jobs:
             - name: Retag to latest
               run: |
                 docker pull jhae/ci-backend:latest
-                docker tage jhae/ci-backend:latest jhae/ci-backend:old
-                docker push jhae/ci-backend:lates
+                docker tag jhae/ci-backend:latest jhae/ci-backend:old
+                docker push jhae/ci-backend:old
                 
             - name: Build and push
               uses: docker/build-push-action@v2
