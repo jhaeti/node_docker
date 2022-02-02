@@ -54,7 +54,7 @@ jobs:
               with:
                   context: api
                   push: true
-                  tags: jhae/ci-backend:latest-v2
+                  tags: jhae/ci-backend:latest
                   
     retag-latest-image:
         runs-on: ubuntu-latest
@@ -66,10 +66,10 @@ jobs:
             - name: Retag to latest
               uses: koraykoska/retag-docker-image@0.2.4
               with:
-                registry: some.registry.com
+                registry: docker.io
                 name: jhae/ci-backend
                 old_tag: latest
                 new_tag: ${{ github.sha }}
-                username: ${{ secrets.DOCKERHUB_USERNAME }}
-                password: ${{ secrets.DOCKERHUB_PASSWORD }}
+                username: ${{ secrets.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
         
