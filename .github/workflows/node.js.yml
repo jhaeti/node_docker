@@ -47,11 +47,17 @@ jobs:
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
-            - name: Retag to latest
+                  
+            - name: Set outputs
+              id: vars
+              run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+            - name: Check outputs
+              run: echo ${{ steps.vars.outputs.sha_short }}
+            - name: Retag latest image to output
               run: |
                 docker pull jhae/ci-backend:latest
-                docker tag jhae/ci-backend:latest jhae/ci-backend:old
-                docker push jhae/ci-backend:${{github.sha}}
+                docker tag jhae/ci-backend:latest jhae/ci-backend:${{ steps.vars.outputs.sha_short }}
+                docker push jhae/ci-backend:${{ steps.vars.outputs.sha_short }}
                 
             - name: Build and push
               uses: docker/build-push-action@v2
