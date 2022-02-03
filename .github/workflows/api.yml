@@ -57,7 +57,7 @@ jobs:
               run: |
                 docker pull ${{secrets.DOCKERHUB_IMAGE}}:latest
                 docker tag ${{secrets.DOCKERHUB_IMAGE}}:latest ${{secrets.DOCKERHUB_IMAGE}}:${{ steps.vars.outputs.sha_short }}
-                docker push ${{secrets.DOCKERHUB_IMAGE}}:${{ steps.vars.outputs.sha_short }}
+                docker push jhae/ci-backend:${{ steps.vars.outputs.sha_short }}
                 
                 
     Build-and-push-umage:
