@@ -37,7 +37,9 @@ jobs:
     Storing-previous-image-with-new-tag:
         needs: Test
         runs-on: ubuntu-latest
+        
         steps:
+            - uses: actions/checkout@v2
             - name: Set up QEMU
               uses: docker/setup-qemu-action@v1
             - name: Set up Docker Buildx
@@ -57,7 +59,7 @@ jobs:
               run: |
                 docker pull ${{secrets.DOCKERHUB_IMAGE}}:latest
                 docker tag ${{secrets.DOCKERHUB_IMAGE}}:latest ${{secrets.DOCKERHUB_IMAGE}}:${{ steps.vars.outputs.sha_short }}
-                docker push jhae/ci-backend:${{ steps.vars.outputs.sha_short }}
+                docker push ${{secrets.DOCKERHUB_IMAGE}}:${{ steps.vars.outputs.sha_short }}
                 
                 
     Build-and-push-umage:
