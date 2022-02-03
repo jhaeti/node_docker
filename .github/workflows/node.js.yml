@@ -62,16 +62,16 @@ jobs:
               run: echo ${{ steps.vars.outputs.sha_short }}
             - name: Retag latest image to output
               run: |
-                docker pull jhae/ci-backend:latest
-                docker tag jhae/ci-backend:latest jhae/ci-backend:${{ steps.vars.outputs.sha_short }}
-                docker push jhae/ci-backend:${{ steps.vars.outputs.sha_short }}
+                docker pull ${{secrets.DOCKERHUB_IMAGE}}:latest
+                docker tag ${{secrets.DOCKERHUB_IMAGE}}:latest ${{secrets.DOCKERHUB_IMAGE}}:${{ steps.vars.outputs.sha_short }}
+                docker push ${{secrets.DOCKERHUB_IMAGE}}:${{ steps.vars.outputs.sha_short }}
                 
             - name: Build and push
               uses: docker/build-push-action@v2
               with:
                   context: api
                   push: true
-                  tags: jhae/ci-backend:latest
+                  tags: ${{secrets.DOCKERHUB_IMAGE}}:latest
     
             
                 
