@@ -14,13 +14,18 @@ beforeEach(async () => {
     await new Item(itemTwo).save();
 });
 
+afterAll((done) => {
+    // Closing the DB connection allows Jest to exit successfully.
+    mongoose.connection.close();
+    done();
+});
+
 test("Should get all items from the database", async () => {
     let response = await request(app).get("/api/items");
     // response = await JSON.stringify(response);
     // response = await JSON.parse(response);
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(2);
-    await console.log(response);
 });
 
 test("Should load the main page", async () => {
