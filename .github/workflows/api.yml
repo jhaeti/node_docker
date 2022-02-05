@@ -69,4 +69,4 @@ jobs:
             - name: showing image name
               run: |
                 echo ${{secrets.DOCKERHUB_IMAGE}}:${{needs.Build-and-push-image.outputs.FOO}}
-                echo ${{outputs.TAG}}
+  
