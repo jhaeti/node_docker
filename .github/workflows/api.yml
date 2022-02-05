@@ -61,12 +61,12 @@ jobs:
                   
     Echo-image-name:
         needs: Build-and-push-image
-        outputs:
+        env:
           TAG: ${{needs.Build-and-push-image.outputs.FOO}}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
             - name: showing image name
               run: |
-                echo ${{secrets.DOCKERHUB_IMAGE}}:${{needs.Build-and-push-image.outputs.FOO}}
+                echo ${{secrets.DOCKERHUB_IMAGE}}:$TAG
   
