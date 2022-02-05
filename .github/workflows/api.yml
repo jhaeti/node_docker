@@ -59,14 +59,21 @@ jobs:
                   push: true
                   tags: ${{secrets.DOCKERHUB_IMAGE}}:${{steps.vars.outputs.sha_short}}
                   
-    Echo-image-name:
+
+    Deploy-To-SSH:
         needs: Build-and-push-image
         env:
           TAG: ${{needs.Build-and-push-image.outputs.FOO}}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - name: showing image name
-              run: |
-                echo ${{secrets.DOCKERHUB_IMAGE}}:$TAG
+            - name: multiple command
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ secrets.HOST }}
+                username: ${{ secrets.HOST_USER }}
+                key: ${{ secrets.HOST_KEY }}
+                script: |
+                    whoami
+                    ls -al
   
