@@ -25,7 +25,9 @@ jobs:
             - uses: actions/checkout@v2
             - name: Set outputs
               id: vars
-              run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+              run: |
+                echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+                echo ${{ steps.vars.outputs.sha_short }}
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v2
               with:
@@ -53,10 +55,10 @@ jobs:
 #                   username: ${{ secrets.DOCKERHUB_USERNAME }}
 #                   password: ${{ secrets.DOCKERHUB_TOKEN }}
                   
-            - name: Run outputs
+#             - name: Run outputs
 #               id: vars
 #               run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-#             - name: Check outputs
+            - name: Check outputs
               run: echo ${{ steps.vars.outputs.sha_short }}
 #             - name: Retag latest image to outputs.sha_shorts
 #               run: |
