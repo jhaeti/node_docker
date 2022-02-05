@@ -1,6 +1,3 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: Node.js CI
 
 on:
@@ -32,12 +29,12 @@ jobs:
               uses: supercharge/mongodb-github-action@1.7.0
             - run: npm ci
             - run: npm run test:staging
-            
-            
-    Storing-previous-image-with-new-tag:
+                
+    Build-and-push-image:
         needs: Test
         runs-on: ubuntu-latest
-        
+        outputs:
+            FOO: ${{ steps.vars.outputs.sha_short }}
         steps:
             - uses: actions/checkout@v2
             - name: Set up QEMU
@@ -55,30 +52,21 @@ jobs:
               run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
             - name: Check outputs
               run: echo ${{ steps.vars.outputs.sha_short }}
-            - name: Retag latest image to outputs.sha_shorts
-              run: |
-                docker pull ${{secrets.DOCKERHUB_IMAGE}}:latest
-                docker tag ${{secrets.DOCKERHUB_IMAGE}}:latest ${{secrets.DOCKERHUB_IMAGE}}:${{ steps.vars.outputs.sha_short }}
-                docker push ${{secrets.DOCKERHUB_IMAGE}}:${{ steps.vars.outputs.sha_short }}
-                
-                
-    Build-and-push-umage:
-        needs: Test
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-            - name: Set up QEMU
-              uses: docker/setup-qemu-action@v1
-            - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v1
-            - name: Login to DockerHub
-              uses: docker/login-action@v1
-              with:
-                  username: ${{ secrets.DOCKERHUB_USERNAME }}
-                  password: ${{ secrets.DOCKERHUB_TOKEN }}
             - name: Build and push
               uses: docker/build-push-action@v2
               with:
                   context: api
                   push: true
-                  tags: ${{secrets.DOCKERHUB_IMAGE}}:latest
+                  tags: ${{secrets.DOCKERHUB_IMAGE}}:${{steps.vars.outputs.sha_short}}
+                  
+    Echo-image-name:
+        needs: Build-and-push-image
+        env:
+          TAG: ${{needs.Build-and-push-image.outputs.FOO}}
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: showing image name
+              run: |
+                echo ${{secrets.DOCKERHUB_IMAGE}}:$TAG
+  
