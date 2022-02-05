@@ -31,8 +31,8 @@ jobs:
               with:
                 node-version: ${{ matrix.node-version }}
 #                 cache: 'npm'
-#             - name: Start MongoDB
-#               uses: supercharge/mongodb-github-action@1.7.0
+            - name: Start MongoDB
+              uses: supercharge/mongodb-github-action@1.7.0
             - run: npm ci
             - run: npm run test:staging
             
