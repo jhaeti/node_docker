@@ -11,15 +11,15 @@ jobs:
     Test:
 
         runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: api
+#         defaults:
+#             run:
+#                 working-directory: api
 
-        strategy:
-            matrix:
-                node-version: [16.x]
-                # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-                mongodb-version: ['4.2']
+#         strategy:
+#             matrix:
+#                 node-version: [16.x]
+#                 # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+#                 mongodb-version: ['4.2']
 
         steps:
             - uses: higebu/conventional-commits-parser-action@v1
