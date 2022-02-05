@@ -72,7 +72,7 @@ jobs:
               with:
                 host: ${{ secrets.HOST }}
                 username: ${{ secrets.HOST_USER }}
-                key: ${{ secrets.HOST_KEY }}
+                password: ${{ secrets.HOST_KEY }}
                 script: |
                     whoami
                     ls -al
