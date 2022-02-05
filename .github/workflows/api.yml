@@ -75,5 +75,5 @@ jobs:
                 password: ${{ secrets.HOST_KEY }}
                 script: |
                     whoami
-                    ls -al
+                    ls
   
