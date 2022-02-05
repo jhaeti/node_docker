@@ -22,29 +22,34 @@ jobs:
                 mongodb-version: ['4.2']
 
         steps:
-            - uses: actions/checkout@v2
-            - name: Set outputs
-              id: vars
-              run: |
-                echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-                echo ${{ steps.vars.outputs.sha_short }}
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v2
-              with:
-                node-version: ${{ matrix.node-version }}
-#                 cache: 'npm'
-            - name: Start MongoDB
-              uses: supercharge/mongodb-github-action@1.7.0
-            - run: npm ci
-            - run: npm run test:staging
+            - uses: higebu/conventional-commits-parser-action@v1
+              id: parser
+            - run: |
+                echo 'this step will be run if the commit type is `fix`'
+              if: ${{ steps.paser.outputs.type == 'fix' }}
+#             - uses: actions/checkout@v2
+#             - name: Set outputs
+#               id: vars
+#               run: |
+#                 echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+#                 echo ${{ steps.vars.outputs.sha_short }}
+#             - name: Use Node.js ${{ matrix.node-version }}
+#               uses: actions/setup-node@v2
+#               with:
+#                 node-version: ${{ matrix.node-version }}
+# #                 cache: 'npm'
+#             - name: Start MongoDB
+#               uses: supercharge/mongodb-github-action@1.7.0
+#             - run: npm ci
+#             - run: npm run test:staging
             
             
-    Storing-previous-image-with-new-tag:
-        needs: Test
-        runs-on: ubuntu-latest
+#     Storing-previous-image-with-new-tag:
+#         needs: Test
+#         runs-on: ubuntu-latest
         
-        steps:
-            - uses: actions/checkout@v2
+#         steps:
+#             - uses: actions/checkout@v2
 #             - name: Set up QEMU
 #               uses: docker/setup-qemu-action@v1
 #             - name: Set up Docker Buildx
@@ -58,8 +63,8 @@ jobs:
 #             - name: Run outputs
 #               id: vars
 #               run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-            - name: Check outputs
-              run: echo ${{ steps.vars.outputs.sha_short }}
+#             - name: Check outputs
+#               run: echo ${{ steps.vars.outputs.sha_short }}
 #             - name: Retag latest image to outputs.sha_shorts
 #               run: |
 #                 docker pull ${{secrets.DOCKERHUB_IMAGE}}:latest
