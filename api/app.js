@@ -1,14 +1,14 @@
 const express = require("express");
 const app = express();
 
-require("./db");
+// require("./db");
 
 app.use(express.json({ extended: false }));
 
 app.use("/api", require("./router"));
 
 app.get("/", (req, res) => {
-    res.send("<h1>From Node Server</h1>");
+    res.send("<h1>From Node Server1</h1>");
 });
 
 module.exports = app;
