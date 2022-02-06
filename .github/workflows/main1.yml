@@ -96,7 +96,6 @@ jobs:
                     cd app
                     docker-compose pull
                     docker stack deploy -c docker-compose.yml appv1
-                    docker image prune
-                    y
+                    docker image prune -a -f
                     
                     
