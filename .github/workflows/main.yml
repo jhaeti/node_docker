@@ -36,5 +36,4 @@ jobs:
                 envs: Tag
                 script: |
                     echo $IMAGE_TAG
-
                     echo $Tag
