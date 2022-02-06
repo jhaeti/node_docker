@@ -96,7 +96,7 @@ jobs:
                     cd app
                     docker-compose pull
                     docker stack deploy -c docker-compose.yml appv1
-                    docker service rm $(docker ps -a -f STATUS=exited)
+                    docker rm $(docker ps -a -f STATUS=exited)
                     docker image prune -a -f
                     
                     
