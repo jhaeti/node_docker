@@ -36,10 +36,6 @@ test("Should load the main page", async () => {
     response = JSON.parse(response);
     expect(response.status).toBe(200);
 });
-test("Should load the main page", async () => {
-    let response = await request(app).get("/");
-    expect(response.status).toBe(200);
-});
 
 // test("Should get the data object", async () => {
 //     let response = await request(app).get("/api");
