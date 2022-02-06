@@ -1,4 +1,4 @@
-name: API CI
+name: Node.js CI
 
 on:
     push:
@@ -29,12 +29,12 @@ jobs:
               uses: supercharge/mongodb-github-action@1.7.0
             - run: npm ci
             - run: npm run test:staging
-                
-    Build-and-push-image:
+            
+            
+    Storing-previous-image-with-new-tag:
         needs: Test
         runs-on: ubuntu-latest
-        outputs:
-            FOO: ${{ steps.vars.outputs.sha_short }}
+        
         steps:
             - uses: actions/checkout@v2
             - name: Set up QEMU
@@ -52,18 +52,35 @@ jobs:
               run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
             - name: Check outputs
               run: echo ${{ steps.vars.outputs.sha_short }}
+            - name: Retag latest image to outputs.sha_shorts
+              run: |
+                docker pull ${{secrets.DOCKERHUB_IMAGE}}:latest
+                docker tag ${{secrets.DOCKERHUB_IMAGE}}:latest ${{secrets.DOCKERHUB_IMAGE}}:${{ steps.vars.outputs.sha_short }}
+                docker push ${{secrets.DOCKERHUB_IMAGE}}:${{ steps.vars.outputs.sha_short }}
+                
+                
+    Build-and-push-image:
+        needs: Test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v1
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v1
+            - name: Login to DockerHub
+              uses: docker/login-action@v1
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
             - name: Build and push
               uses: docker/build-push-action@v2
               with:
                   context: api
                   push: true
-                  tags: ${{secrets.DOCKERHUB_IMAGE}}:${{steps.vars.outputs.sha_short}}
-                  
-
+                  tags: ${{secrets.DOCKERHUB_IMAGE}}:latest
     Deploy-To-SERVER:
         needs: Build-and-push-image
-        env:
-          Tag: ${{needs.Build-and-push-image.outputs.FOO}}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
@@ -75,9 +92,9 @@ jobs:
                 password: ${{ secrets.HOST_KEY }}
                 envs: Tag
                 script: |
-                    docker image rm ${{secrets.DOCKERHUB_IMAGE}}:$IMAGE_TAG -f
-                    export IMAGE_TAG=$Tag
+                    docker image rm jhae/ci-backend:latest -f
                     cd app
                     docker-compose pull
                     docker stack deploy -c docker-compose.yml appv1
-                    docker service scale appv1_server=3
+                    docker image prune
+                    
