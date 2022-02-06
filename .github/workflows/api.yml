@@ -75,7 +75,7 @@ jobs:
                 password: ${{ secrets.HOST_KEY }}
                 script: |
                     docker image rm ${{secrets.DOCKERHUB_IMAGE}}:$IMAGE_TAG -f
-                    echo $IMAGE_TAG=$TAG
+                    export $IMAGE_TAG=$TAG
                     cd app
                     docker-compose pull
                     docker stack deploy -c docker-compose.yml appv1
