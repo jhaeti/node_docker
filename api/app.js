@@ -8,7 +8,7 @@ app.use(express.json({ extended: false }));
 app.use("/api", require("./router"));
 
 app.get("/", (req, res) => {
-    res.send("<h1>From Node Server. THANK ALLAH FOR ALL HE HAS DONE</h1>");
+    res.send("<h1>From Node Server. THANK ALLAH</h1>");
 });
 
 module.exports = app;
