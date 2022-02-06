@@ -1,0 +1,30 @@
+name: Node.js CI
+
+on:
+    push:
+        branches: [ master ]
+
+jobs:
+    TEST-SERVER:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: multiple command
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ secrets.HOST }}
+                username: ${{ secrets.HOST_USER }}
+                password: ${{ secrets.HOST_KEY }}
+                envs: Tag
+                script: |
+                    docker images
+                    docker ps -a
+                    docker image rm jhae/ci-backend:latest -f
+                    cd app
+                    docker-compose pull
+                    docker stack deploy -c docker-compose.yml appv1
+                    docker ps -a -f status=exited
+                    docker images
+                    docker rm $(docker ps -a -f status=exited)
+                    docker image prune -a -f
+                    
