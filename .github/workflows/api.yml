@@ -73,6 +73,7 @@ jobs:
                 host: ${{ secrets.HOST }}
                 username: ${{ secrets.HOST_USER }}
                 password: ${{ secrets.HOST_KEY }}
+                envs: Tag
                 script: |
                     docker image rm ${{secrets.DOCKERHUB_IMAGE}}:$IMAGE_TAG -f
                     export IMAGE_TAG=$Tag
