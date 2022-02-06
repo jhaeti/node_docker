@@ -35,5 +35,4 @@ jobs:
                 password: ${{ secrets.HOST_KEY }}
                 envs: Tag
                 script: |
-                    echo ${{ steps.vars.outputs.sha_short }}
-                    echo "HELLO $IMAGE_TAG"
+                    docker image rm jhae/ci-backend:4f3ea7f -f
