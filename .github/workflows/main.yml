@@ -35,5 +35,5 @@ jobs:
                 password: ${{ secrets.HOST_KEY }}
                 envs: Tag
                 script: |
-                    echo "$IMAGE_TAG"
-                    echo "$Tag"
+                    echo "HELLO $Tag"
+                    echo "HELLO $IMAGE_TAG"
