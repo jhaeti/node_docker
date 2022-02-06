@@ -96,7 +96,20 @@ jobs:
                     cd app
                     docker-compose pull
                     docker stack deploy -c docker-compose.yml appv1
-                    docker rm $(docker ps -a -f STATUS=exited)
+    CLEANING-CONTAINERS-AND-IMAGES-ON-SERVER:
+        needs:  Deploy-To-SERVER
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Removing All dangling images and containers after updating the images to latest
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ secrets.HOST }}
+                username: ${{ secrets.HOST_USER }}
+                password: ${{ secrets.HOST_KEY }}
+                envs: Tag
+                script: |
+                    docker rm $(docker ps -a -f status=exited)
                     docker image prune -a -f
                     
                     
