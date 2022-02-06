@@ -1,4 +1,4 @@
-name:  CI
+name: Node.js CI
 
 on:
     push:
@@ -12,23 +12,23 @@ jobs:
             run:
                 working-directory: api
 
-#         strategy:
-#             matrix:
-#                 node-version: [16.x]
-#                 # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-#                 mongodb-version: ['4.2']
+        strategy:
+            matrix:
+                node-version: [16.x]
+                # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+                mongodb-version: ['4.2']
 
         steps:
             - uses: actions/checkout@v2
-#             - name: Use Node.js ${{ matrix.node-version }}
-#               uses: actions/setup-node@v2
-#               with:
-#                 node-version: ${{ matrix.node-version }}
-#                 cache: 'npm'
-#             - name: Start MongoDB
-#               uses: supercharge/mongodb-github-action@1.7.0
-#             - run: npm ci
-#             - run: npm run test:staging
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v2
+              with:
+                node-version: ${{ matrix.node-version }}
+                cache: 'npm'
+            - name: Start MongoDB
+              uses: supercharge/mongodb-github-action@1.7.0
+            - run: npm ci
+            - run: npm run test:staging
                 
     Build-and-push-image:
         needs: Test
@@ -37,33 +37,33 @@ jobs:
             FOO: ${{ steps.vars.outputs.sha_short }}
         steps:
             - uses: actions/checkout@v2
-#             - name: Set up QEMU
-#               uses: docker/setup-qemu-action@v1
-#             - name: Set up Docker Buildx
-#               uses: docker/setup-buildx-action@v1
-#             - name: Login to DockerHub
-#               uses: docker/login-action@v1
-#               with:
-#                   username: ${{ secrets.DOCKERHUB_USERNAME }}
-#                   password: ${{ secrets.DOCKERHUB_TOKEN }}
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v1
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v1
+            - name: Login to DockerHub
+              uses: docker/login-action@v1
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
                   
             - name: Set outputs
               id: vars
               run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
             - name: Check outputs
               run: echo ${{ steps.vars.outputs.sha_short }}
-#             - name: Build and push
-#               uses: docker/build-push-action@v2
-#               with:
-#                   context: api
-#                   push: true
-#                   tags: ${{secrets.DOCKERHUB_IMAGE}}:${{steps.vars.outputs.sha_short}}
+            - name: Build and push
+              uses: docker/build-push-action@v2
+              with:
+                  context: api
+                  push: true
+                  tags: ${{secrets.DOCKERHUB_IMAGE}}:${{steps.vars.outputs.sha_short}}
                   
 
     Deploy-To-SERVER:
         needs: Build-and-push-image
         env:
-          TAG: ${{needs.Build-and-push-image.outputs.FOO}}
+          Tag: ${{needs.Build-and-push-image.outputs.FOO}}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
@@ -73,15 +73,10 @@ jobs:
                 host: ${{ secrets.HOST }}
                 username: ${{ secrets.HOST_USER }}
                 password: ${{ secrets.HOST_KEY }}
-#                 script: |
-#                     docker image rm ${{secrets.DOCKERHUB_IMAGE}}:$IMAGE_TAG -f
-#                     export $IMAGE_TAG=$TAG
-#                     cd app
-#                     docker-compose pull
-#                     docker stack deploy -c docker-compose.yml appv1
-#                     docker service scale appv1_server=3
                 script: |
-                    echo $TAG
-                    echo ${{TAG}}
-                    echo ${{env.TAG}}
-  
+                    docker image rm ${{secrets.DOCKERHUB_IMAGE}}:$IMAGE_TAG -f
+                    export IMAGE_TAG=$Tag
+                    cd app
+                    docker-compose pull
+                    docker stack deploy -c docker-compose.yml appv1
+                    docker service scale appv1_server=3
